@@ -2,11 +2,17 @@ import AllAsanas from "../components/content-management/AllAsanas";
 import RegisterPlaylistForm from "../components/content-management/forms/RegisterPlaylistForm";
 import RegisterVideoForm from "../components/content-management/forms/RegisterVideoForm";
 import AdminHome from "../pages/admin/AdminHome";
+<<<<<<< Updated upstream
 import AllPlaylists from "../components/content-management/AllPlaylists";
 import AllLanguages from "../components/content-management/AllLanguages";
 import RegisterLanguageForm from "../components/content-management/forms/RegisterLanguage";
 import RegisterNewPlan from "../pages/admin/Plans/RegisterNewPlan";
 import ViewAllPlans from "../pages/admin/Plans/ViewAllPlans";
+=======
+import AllPlaylists from "../components/content-management/forms/AllPlaylists";
+import Plan from "../components/content-management/forms/Plans";
+
+>>>>>>> Stashed changes
 export const AdminRoutes = [
   {
     path: "/admin",
@@ -37,6 +43,7 @@ export const AdminRoutes = [
     element: <AllPlaylists />,
   },
   {
+<<<<<<< Updated upstream
     path: "/admin/allLanguages",
     element: <AllLanguages />,
   },
@@ -48,4 +55,9 @@ export const AdminRoutes = [
     path: "/admin/plan/viewallplans",
     element: <ViewAllPlans />,
   }
+=======
+    path: "/admin/plans",
+    element: <Plan />,
+  },
+>>>>>>> Stashed changes
 ];
