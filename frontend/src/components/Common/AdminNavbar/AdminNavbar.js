@@ -95,30 +95,6 @@ export default function AdminNavbar() {
                   Register New Playlist
                 </Link>
               </ButtonDropdown.Item>
-              <ButtonDropdown.Item>
-                <Link
-                  to={"/admin/allPlaylists"}
-                  className="w-full text-zinc-800"
-                >
-                  View All Playlists
-                </Link>
-              </ButtonDropdown.Item>
-              <ButtonDropdown.Item>
-                <Link
-                  to={"/content/language/create"}
-                  className="w-full text-zinc-800"
-                >
-                  Register New Language
-                </Link>
-              </ButtonDropdown.Item>
-              <ButtonDropdown.Item>
-                <Link
-                  to={"/admin/allLanguages"}
-                  className="w-full text-zinc-800"
-                >
-                  View All Languages
-                </Link>
-              </ButtonDropdown.Item>
             </ButtonDropdown>
 
             <Button className="w-full">
@@ -129,14 +105,22 @@ export default function AdminNavbar() {
                 Account Management
               </Link>
             </Button>
-            <Button className="w-full">
-              <Link
-                to={"/content/video/create"}
-                className="w-full text-zinc-800"
-              >
-                Plan Management
-              </Link>
-            </Button>
+            <ButtonDropdown className="w-full">
+              <ButtonDropdown.Item main>Plan Management</ButtonDropdown.Item>
+              <ButtonDropdown.Item>
+                <Link
+                  to={"/admin/plan/registernewplan"}
+                  className="w-full text-zinc-800"
+                >
+                  Register New Plan
+                </Link>
+              </ButtonDropdown.Item>
+              <ButtonDropdown.Item>
+                <Link to={"/admin/plan/viewallplans"} className="w-full text-zinc-800">
+                  View All Plans
+                </Link>
+              </ButtonDropdown.Item>              
+            </ButtonDropdown>
             <Button className="w-full">
               <Link
                 to={"/content/video/create"}
@@ -175,6 +159,14 @@ export default function AdminNavbar() {
                 className="w-full text-zinc-800"
               >
                 Reports
+              </Link>
+            </Button>
+            <Button className="w-full">
+              <Link
+                to={"/admin/plans"}
+                className="w-full text-zinc-800"
+              >
+                Plans and Packages
               </Link>
             </Button>
           </div>
