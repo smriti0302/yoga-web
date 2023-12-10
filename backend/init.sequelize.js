@@ -11,8 +11,9 @@ var sequelize = new Sequelize('yoga', 'root', 'root', {
     logging: false,
 });
 
+// Initializes and syncs the db
 function initializeSequelize() {
-    return sequelize.sync({ force: true });
+    return sequelize.sync({ alter: true });
 }
 
 module.exports = { sequelize, initializeSequelize };
