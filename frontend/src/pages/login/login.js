@@ -2,58 +2,60 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Button, Input } from "@geist-ui/core";
-import axios from "axios";
 import LoginGoogle from "../../components/Auth/LoginGoogle";
-import useUserStore from "../../store/UserStore";
+// import useUserStore from "../../store/UserStore";
 import "./login.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login({ switchForm }) {
-  const [loginStatus, setLoginStatus] = useState(null);
   const navigate = useNavigate();
-  const [type, SetType] = useState("");
-  const setUser = useUserStore((state) => state.setUser);
+  const notify = (x) => toast(x);
+  const [loginStatus, setLogInStatus] = useState(false);
+  const [userType, setUserType] = useState("");
 
-  async function verify_login(username, password) {
-    try {
-      const baseURL = "http://localhost:4000";
-      const response = await axios.get(`${baseURL}/allUsers`);
-      var userExists = false;
-      for (const entry of response.data) {
-        if (entry.username === username && entry.password === password) {
-          userExists = true;
-          SetType(entry.user_type);
-          setUser(entry);
-          break;
-        }
-      }
-      console.log(loginStatus);
-      setLoginStatus(userExists ? "Login successful" : "Invalid credentials");
-    } catch (error) {
-      console.error(error);
-      setLoginStatus("Failed to verify login");
-    }
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const username = document.querySelector("#user_name").value;
     const password = document.querySelector("#pass_word").value;
-    verify_login(username, password);
+    const existingUser = {
+      username: username,
+      password: password,
+    };
+    try {
+      const response = await fetch("http://localhost:4000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(existingUser),
+      });
+      if (response.ok) {
+        notify("Logged in successfully");
+        setLogInStatus(true);
+        const userData = await response.json();
+        setUserType(userData.user.role.name);
+      } else {
+        const errorData = await response.json();
+        notify(errorData.error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    console.log(loginStatus);
-    if (loginStatus === "Login successful" && type === "student") {
-      const navigateTimeout = setTimeout(() => navigate("/student"), 0);
+    if (loginStatus === true && userType === "STUDENT") {
+      const navigateTimeout = setTimeout(() => navigate("/student"), 1500);
       return () => clearTimeout(navigateTimeout);
-    } else if (loginStatus === "Login successful" && type === "admin") {
-      const navigateTimeout = setTimeout(() => navigate("/admin"), 0);
+    } else if (loginStatus === true && userType === "ROOT") {
+      const navigateTimeout = setTimeout(() => navigate("/admin"), 1500);
       return () => clearTimeout(navigateTimeout);
-    } else if (loginStatus === "Login successful" && type === "teacher") {
-      const navigateTimeout = setTimeout(() => navigate("/teacher"), 0);
+    } else if (loginStatus === true && userType === "TEACHER") {
+      const navigateTimeout = setTimeout(() => navigate("/teacher"), 1500);
       return () => clearTimeout(navigateTimeout);
     }
-  }, [loginStatus, type, navigate]);
+  }, [loginStatus, userType, navigate]);
 
   return (
     <div className="bg-white p-4 rounded-lg max-w-xl mx-auto">
@@ -74,7 +76,12 @@ export default function Login({ switchForm }) {
           <span className="text-blue-500">Click Here</span>
         </p>
         <p>{"( or )"}</p>
-        <LoginGoogle />
+        <div>
+          <ToastContainer />
+        </div>
+        <div>
+          <LoginGoogle />
+        </div>
       </div>
     </div>
   );
