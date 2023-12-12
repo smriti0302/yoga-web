@@ -18,13 +18,9 @@ const { timeout } = require("../utils/promise_timeout");
 const { validate_email } = require("../utils/validate_email");
 
 router.post("/auth/verify-google", async (req, res) => {
-  // console.log(req.body);
   const { client_id, jwtToken } = req.body;
   try {
-    // console.log('trying to verify');
     const userInfo = await auth.verify(client_id, jwtToken);
-    // console.log('verified');
-    // console.log(userInfo);
     return res.status(HTTP_OK).json(userInfo);
   } catch (error) {
     console.error("Authentication error:", error.message);
