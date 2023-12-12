@@ -40,7 +40,7 @@ router.post("/auth/login", async (req, res) => {
   // check if user exists
   const user = await UserSQL.findOne({
     where: { username: username },
-    attributes: ["id", "name", "username", "email", "password"],
+    attributes: ["user_id", "name", "username", "email", "password"],
     include: [
       { model: Institute, attributes: ["name"] },
       { model: Role, attributes: ["name"] },
@@ -108,7 +108,7 @@ router.post("/auth/register", async (req, res) => {
     where: {
       [Op.or]: [{ username: username }, { email: email }],
     },
-    attributes: ["id", "name", "username", "email"],
+    attributes: ["user_id", "name", "username", "email"],
   });
 
   // console.log(user);
@@ -236,7 +236,7 @@ router.post("/auth/register-google", async (req, res) => {
     where: {
       email: email,
     },
-    attributes: ["id", "name", "username", "email"],
+    attributes: ["user_id", "name", "username", "email"],
   });
 
   // console.log(user);
