@@ -2,6 +2,10 @@ import React from "react";
 import StudentNavbar from "../../components/Common/StudentNavbar/StudentNavbar";
 import useUserStore from "../../store/UserStore";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+
 import {
   Table,
   Grid,
@@ -12,6 +16,8 @@ import {
   Input,
 } from "@geist-ui/core";
 function StudentPlan() {
+  const notify = (x) => toast(x);
+  const navigate = useNavigate();
   let user = useUserStore((state) => state.user);
   const [allPlans, setAllPlans] = useState([]);
   const [showCard, setShowCard] = useState(false);
@@ -32,7 +38,7 @@ function StudentPlan() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:4000/get-all-student-plans"
+          "http://localhost:4000/plan/get-all-student-plans"
         );
         const data = await response.json();
         setAllPlans(data["plans"]);
@@ -47,24 +53,41 @@ function StudentPlan() {
     e.preventDefault();
     const discount_code = document.querySelector("#discount_code").value;
     const referral_code = document.querySelector("#referral_code").value;
-    console.log(
-      selectedValidity,
-      referral_code,
-      discount_code,
-      formattedDate,
-      calculateEndDate(selectedValidity),
-      user,
-      cardData
-    );
     const userPlanData = {
       purchase_date: formattedDate,
       validity_from: formattedDate,
       validity_to: calculateEndDate(selectedValidity),
-      cancellation_date: "",
+      cancellation_date: null,
       auto_renewal_enabled: false,
       user_id: user.user_id,
       plan_id: cardData.plan_id,
+      discount_code: discount_code,
+      referral_code: referral_code,
     };
+    console.log(userPlanData);
+    try {
+      const response = await fetch(
+        "http://localhost:4000/user-plan/register-user-plan",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userPlanData),
+        }
+      );
+      if (response.ok) {
+        notify("New User-Plan added successfully");
+        setTimeout(() => {
+          navigate("/student");
+        }, 2000);
+      } else {
+        const errorData = await response.json();
+        notify(errorData.error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderAction = (value, rowData, index) => {
@@ -200,6 +223,9 @@ function StudentPlan() {
             </form>
           </Card>
         )}
+      </div>
+      <div>
+        <ToastContainer />
       </div>
     </div>
   );
