@@ -27,14 +27,13 @@ function StudentHome() {
         );
         const data = await response.json();
         setUserPlan(data["userPlan"]);
-        console.log(userPlan);
         setPlanId(data["userPlan"]["plan_id"]);
       } catch (error) {
         console.log(error);
       }
     };
     fetchData();
-  }, [user.user_id, userPlan]);
+  }, [user.user_id]);
 
   return (
     <div className="flex-col justify-center">
