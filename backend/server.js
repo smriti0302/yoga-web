@@ -26,6 +26,7 @@ require("dotenv").config();
 
 const asanaRouter = require("./routes/Asana");
 const authRouter = require("./routes/Auth");
+const instituteRouter = require("./routes/Institute");
 const userRouter = require("./routes/User");
 const playlistRouter = require("./routes/Playlist");
 const planRouter = require("./routes/Plan");
@@ -34,6 +35,7 @@ const currencyRouter = require("./routes/Currency");
 const referralCodeRouter = require("./routes/ReferralCode");
 const userPlaylistRouter = require("./routes/PlaylistUser");
 const UserPlaylistCountRouter = require("./routes/UserPlaylistCount");
+
 const { bulkCreateSampleData } = require("./sample_data");
 
 app.use(cors());
@@ -67,6 +69,7 @@ app.use("/currency", currencyRouter);
 app.use("/referral", referralCodeRouter);
 app.use("/user-playlists", userPlaylistRouter);
 app.use("/user-playlist-count", UserPlaylistCountRouter);
+app.use("/institute", instituteRouter);
 
 const port = parseInt(process.env.SERVER_PORT);
 
