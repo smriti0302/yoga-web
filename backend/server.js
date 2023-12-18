@@ -10,6 +10,7 @@ const { UserPlan } = require("./models/sql/UserPlan");
 const { Role } = require("./models/sql/Role");
 const { User } = require("./models/sql/User");
 const { Institute } = require("./models/sql/Institute");
+const { UserInstitute } = require("./models/sql/UserInstitute");
 const { Permission } = require("./models/sql/Permission");
 const { Plan } = require("./models/sql/Plan");
 const { PlanPricing } = require("./models/sql/PlanPricing");
@@ -51,7 +52,13 @@ mongoose
 initializeSequelize()
   .then(() => {
     console.log("Sequelize initialized");
-    // bulkCreateSampleData();
+    // bulkCreateSampleData()
+    //     .then(() => {
+    //         console.log('Sample data created!');
+    //     })
+    //     .catch((err) => {
+    //         console.log(err);
+    //     });
   })
   .catch((err) => {
     console.log(err);
