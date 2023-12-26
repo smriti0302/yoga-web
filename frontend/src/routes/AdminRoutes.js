@@ -6,7 +6,8 @@ import RegisterPlaylistForm from '../components/content-management/forms/Registe
 import RegisterVideoForm from '../components/content-management/forms/RegisterVideoForm';
 import AdminHome from '../pages/admin/AdminHome';
 import RegisterNewPlan from '../pages/admin/Plans/RegisterNewPlan';
-
+// import Settings from '../pages/admin/settings/settings';
+import ViewAllPlans from '../pages/admin/Plans/ViewAllPlans';
 export const AdminRoutes = [
     {
         path: '/admin',
@@ -44,4 +45,12 @@ export const AdminRoutes = [
         path: '/plan/registerNewPlan',
         element: <RegisterNewPlan />,
     },
+    {
+      path: "/plan/viewAllPlans",
+      element: <ViewAllPlans/>,
+    },
+    // {
+    //     path: 'admin/settings',
+    //     element: <Settings />,
+    // },
 ];
