@@ -44,8 +44,10 @@ export default function AdminHome() {
         const fetchData = async () => {
           try {
             const response = await fetch(
-              "http://localhost:4000/institute/get-all-institutes"
+              "http://localhost:4000/institute/get-all-institutes",
+              { headers: { 'Cache-Control': 'no-store' } }
             );
+            console.log(response);
             const data = await response.json();
             setInstitutes(data["institutes"]);
             setupdated(false);
