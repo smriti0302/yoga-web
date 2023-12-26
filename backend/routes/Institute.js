@@ -82,7 +82,8 @@ router.post('/register', async (req, res) => {
 router.get('/get-all-institutes', async (req, res) => {
     try {
         const institutes = await Institute.findAll();
-        return res.status(HTTP_OK).json(institutes);
+        res.setHeader('Cache-Control', 'no-store');
+        return res.status(HTTP_OK).json({"institutes":institutes});
     } catch (error) {
         console.error(error);
         return res
