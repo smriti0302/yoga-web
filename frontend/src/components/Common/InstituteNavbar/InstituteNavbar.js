@@ -75,9 +75,19 @@ export default function InstituteNavbar() {
             <ButtonDropdown className="w-full">
               <ButtonDropdown.Item main>Content Management</ButtonDropdown.Item>
             </ButtonDropdown>
-
             <Button className="w-full">
-              <Link to={"/institute"} className="w-full text-zinc-800">
+              <Link
+                to={"/institute/add-new-teacher"}
+                className="w-full text-zinc-800"
+              >
+                Add New Teacher
+              </Link>
+            </Button>
+            <Button className="w-full">
+              <Link
+                to={"/institute/add-new-teacher"}
+                className="w-full text-zinc-800"
+              >
                 Reports
               </Link>
             </Button>

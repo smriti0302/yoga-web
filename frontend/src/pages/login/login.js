@@ -65,6 +65,7 @@ export default function Login({ switchForm }) {
       if (response.data["userPlan"]) {
         setUserPlan(response.data["userPlan"]);
       } else {
+        console.log("in here!");
         setUserPlan(null);
       }
     } catch (error) {
@@ -85,6 +86,7 @@ export default function Login({ switchForm }) {
       });
 
       if (response.data["institutes"]) {
+        console.log(response.data["institutes"]);
         setInstitutes(response.data["institutes"]);
         if (
           response.data["institutes"] != null &&

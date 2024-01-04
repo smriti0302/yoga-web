@@ -1,8 +1,10 @@
-import StudentHome from "../pages/student/StudentHome";
-import StudentPlan from "../pages/student/StudentPlan";
 import FreeVideos from "../pages/student/FreeVideos";
-import StudentMain from "../pages/student/StudentMain";
 import RegisterNewPlaylistStudent from "../pages/student/RegisterNewPlaylistStudent";
+import StudentHome from "../pages/student/StudentHome";
+import StudentMain from "../pages/student/StudentMain";
+import StudentPlan from "../pages/student/StudentPlan";
+import StudentProfile from "../pages/student/StudentProfile";
+import StudentSettings from "../pages/student/StudentSettings";
 export const StudentRoutes = [
   {
     path: "/student/playlist-view",
@@ -24,5 +26,13 @@ export const StudentRoutes = [
   {
     path: "/student/register-new-playlist",
     element: <RegisterNewPlaylistStudent />,
+  },
+  {
+    path: "/student/my-profile",
+    element: <StudentProfile />,
+  },
+  {
+    path: "/student/settings",
+    element: <StudentSettings />,
   },
 ];
