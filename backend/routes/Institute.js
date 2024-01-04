@@ -82,7 +82,8 @@ router.post('/register', async (req, res) => {
 router.get('/get-all-institutes', async (req, res) => {
     try {
         const institutes = await Institute.findAll();
-        return res.status(HTTP_OK).json(institutes);
+        res.setHeader('Cache-Control', 'no-store');
+        return res.status(HTTP_OK).json({"institutes":institutes});
     } catch (error) {
         console.error(error);
         return res
@@ -336,16 +337,16 @@ router.post('/update-name', async (req, res) => {
     }
 });
 
-router.post('/update', async (req, res) => {
-    const {
-        institute_id,
-        name,
-        address1,
-        address2,
-        email,
-        phone,
-        billing_address,
-    } = req.body;
+router.post("/update/:institute_id", async (req, res) => {
+  const {
+    institute_id,
+    name,
+    address1,
+    address2,
+    email,
+    phone,
+    billing_address,
+  } = req.body;
 
     if (!institute_id) {
         return res
@@ -382,14 +383,13 @@ router.post('/update', async (req, res) => {
     }
 });
 
-router.delete('/delete-by-id', async (req, res) => {
-    const { institute_id } = req.body;
-
-    if (!institute_id) {
-        return res
-            .status(HTTP_BAD_REQUEST)
-            .json({ error: 'Missing required fields' });
-    }
+router.delete("/delete-by-id/:institute_id", async (req, res) => {
+  const { institute_id } = req.params;
+  if (!institute_id) {
+    return res
+      .status(HTTP_BAD_REQUEST)
+      .json({ error: "Missing required fields" });
+  }
 
     const t = await sequelize.transaction();
     try {
