@@ -3,9 +3,16 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
+const dotenv = require("dotenv");
+
+// init the config from .env file
+dotenv.config();
+
+// init the sequelize, nodemailer
+const { initializeSequelize } = require("./init.sequelize");
+const { mailTransporter } = require("./init.nodemailer");
 
 // sql models
-const { initializeSequelize } = require("./init.sequelize");
 const { UserPlan } = require("./models/sql/UserPlan");
 const { Role } = require("./models/sql/Role");
 const { User } = require("./models/sql/User");
@@ -22,9 +29,9 @@ const { DiscountCoupon } = require("./models/sql/DiscountCoupon");
 const {
   DiscountCouponApplicablePlan,
 } = require("./models/sql/DiscountCouponApplicablePlan");
+const invite = require("./models/sql/Invite");
 
-require("dotenv").config();
-
+// routers
 const asanaRouter = require("./routes/Asana");
 const authRouter = require("./routes/Auth");
 const instituteRouter = require("./routes/Institute");
@@ -37,12 +44,15 @@ const referralCodeRouter = require("./routes/ReferralCode");
 const userPlaylistRouter = require("./routes/PlaylistUser");
 const UserPlaylistCountRouter = require("./routes/UserPlaylistCount");
 
+// DEV : sample data creation
 const { bulkCreateSampleData } = require("./sample_data");
 
+// middleware
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+// initialize databases
 const mongoURI = process.env.MONGO_SRV_URL;
 mongoose
   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -53,19 +63,18 @@ initializeSequelize()
   .then(() => {
     console.log("Sequelize initialized");
     // bulkCreateSampleData()
-    //     .then(() => {
-    //         console.log('Sample data created!');
-    //     })
-    //     .catch((err) => {
-    //         console.log(err);
-    //     });
+    //   .then(() => {
+    //     console.log("Sample data created!");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   })
   .catch((err) => {
     console.log(err);
   });
 
 // bind routers
-
 app.use("/content", asanaRouter);
 app.use("/content", playlistRouter);
 app.use("/user", userRouter);

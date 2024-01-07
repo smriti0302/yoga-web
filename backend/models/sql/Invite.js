@@ -28,6 +28,14 @@ const Invite = sequelize.define(
             type: DataTypes.BOOLEAN,
             defaultValue: false,
         },
+        is_filled: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        is_retracted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
         expiry_date: {
             type: DataTypes.DATE,
             allowNull: false,

@@ -156,9 +156,7 @@ router.put("/update-plan/:plan_id", async (req, res) => {
   });
 
   if (!existingPlan) {
-    return res
-      .status(HTTP_BAD_REQUEST)
-      .json({ error: "Plan does not exist" });
+    return res.status(HTTP_BAD_REQUEST).json({ error: "Plan does not exist" });
   }
 
   // Update plan properties
@@ -203,9 +201,7 @@ router.delete("/deletePlan/:plan_id", async (req, res) => {
   });
 
   if (!existingPlan) {
-    return res
-      .status(HTTP_BAD_REQUEST)
-      .json({ error: "Plan does not exist" });
+    return res.status(HTTP_BAD_REQUEST).json({ error: "Plan does not exist" });
   }
 
   // Delete the plan from the database
