@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-
+import RenderRazorpay from "./RenderRazorpay";
 import {
   Table,
   Grid,
@@ -22,6 +22,13 @@ function StudentPlan() {
   const [allPlans, setAllPlans] = useState([]);
   const [showCard, setShowCard] = useState(false);
   const [cardData, setCardData] = useState({});
+  const [displayRazorpay, setDisplayRazorpay] = useState(false);
+  const [orderDetails, setOrderDetails] = useState({
+    orderId: null,
+    currency: null,
+    amount: null,
+  });
+
   const today = new Date();
   const formattedDate = today.toISOString().split("T")[0];
 
@@ -54,31 +61,42 @@ function StudentPlan() {
     e.preventDefault();
     const discount_code = document.querySelector("#discount_code").value;
     const referral_code = document.querySelector("#referral_code").value;
+    // const userPlanData = {
+    //   purchase_date: formattedDate,
+    //   validity_from: formattedDate,
+    //   validity_to: calculateEndDate(selectedValidity),
+    //   cancellation_date: null,
+    //   auto_renewal_enabled: false,
+    //   user_id: user.user_id,
+    //   plan_id: cardData.plan_id,
+    //   discount_code: discount_code,
+    //   referral_code: referral_code,
+    // };
     const userPlanData = {
-      purchase_date: formattedDate,
-      validity_from: formattedDate,
-      validity_to: calculateEndDate(selectedValidity),
-      cancellation_date: null,
-      auto_renewal_enabled: false,
-      user_id: user.user_id,
-      plan_id: cardData.plan_id,
-      discount_code: discount_code,
-      referral_code: referral_code,
+      amount: 100,
+      currency: "INR",
     };
-    console.log(userPlanData);
     try {
-      const response = await fetch(
-        "http://localhost:4000/user-plan/register-user-plan",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(userPlanData),
-        }
-      );
+      const response = await fetch("http://localhost:4000/payment/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userPlanData),
+      });
       if (response.ok) {
+        const responseJson = await response.json();
+        const razorpayOrder = responseJson.order;
+        if (razorpayOrder && razorpayOrder["id"]) {
+          setOrderDetails({
+            orderId: razorpayOrder["id"],
+            currency: razorpayOrder["currency"],
+            amount: razorpayOrder["amount"],
+          });
+          setDisplayRazorpay(true);
+        }
         notify("New User-Plan added successfully");
+        // setDisplayRazorpay(false);
         setTimeout(() => {
           navigate("/student");
         }, 2000);
@@ -89,6 +107,29 @@ function StudentPlan() {
     } catch (error) {
       console.log(error);
     }
+    // try {
+    //   const response = await fetch(
+    //     "http://localhost:4000/user-plan/register-user-plan",
+    //     {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(userPlanData),
+    //     }
+    //   );
+    //   if (response.ok) {
+    //     notify("New User-Plan added successfully");
+    //     setTimeout(() => {
+    //       navigate("/student");
+    //     }, 2000);
+    //   } else {
+    //     const errorData = await response.json();
+    //     notify(errorData.error);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const renderAction = (value, rowData, index) => {
@@ -228,6 +269,18 @@ function StudentPlan() {
       <div>
         <ToastContainer />
       </div>
+      {displayRazorpay && (
+        <RenderRazorpay
+          amount={orderDetails.amount}
+          currency={orderDetails.currency}
+          orderId={orderDetails.orderId}
+          // keyId={process.env.REACT_APP_RAZORPAY_LIVE_KEY_ID}
+          // keySecret={process.env.REACT_APP_RAZORPAY_LIVE_KEY_SECRET}
+          keyId={process.env.REACT_APP_RAZORPAY_KEY_ID}
+          keySecret={process.env.REACT_APP_RAZORPAY_KEY_SECRET}
+          setDisplayRazorpay={setDisplayRazorpay}
+        />
+      )}
     </div>
   );
 }
